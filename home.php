@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -91,7 +91,7 @@
           <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Leandro Costa</a>
+          <a href="#" class="d-block">Grazi Guedes</a>
         </div>
       </div>
 
@@ -157,17 +157,19 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-       
+        <!-- Small boxes (Stat box) -->
+        
+        <!-- /.row -->
         <!-- Main row -->
         <div class="row">
           <div class="col-md-5">
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Cadastrar contato</h3>
+                <h3 class="card-title">Cadastrar Contato</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form action="" method="post" enctype="multipart/form-data">
+              <form action="" method="post" enctype="multipart/form-data"> 
                 <div class="card-body">
                   <div class="form-group">
                     <label for="exampleInputPassword1">Nome</label>
@@ -184,7 +186,8 @@
                   
                   <div class="form-group">
                     <label for="exampleInputFile">Foto do contato</label>
-                    <div class="input-group">
+                    <div class="input-group">                       
+                       
                       <div class="custom-file">
                         <input name="foto" type="file" class="custom-file-input" id="exampleInputFile">
                         <label class="custom-file-label" for="exampleInputFile">Upload da foto</label>
@@ -197,67 +200,71 @@
                 <!-- /.card-body -->
 
                 <div class="card-footer">
-                  <button name="btnCContato" type="submit" class="btn btn-primary">Cadastrar Contato</button>
+                  <button name="btnContato" type="submit" class="btn btn-primary">Cadastrar Contato</button>
                 </div>
               </form>
               <?php
                   include_once('config/conexao.php');
-                  if(isset($_POST['btnCContato'])){
+                  if(isset($_POST['btnContato'])){
                       $nome = $_POST['nome'];
                       $telefone = $_POST['telefone'];
                       $email = $_POST['email'];
-                      $foto = $_FILES['foto'];
-                      
-                      $formatP = array("png","jpg","jpeg","JPG","gif"); 
+                      $formatP = array("png","jpg","jpeg","JPG","gif"); //formato aceito para imagem
                       $extensao = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
+                      // $extensao = extrai a extensao do nome do arquivo
 
                       if(in_array($extensao, $formatP)){
-                        $pasta = "img/contato";
-                        $temporario = $_FILES['foto']['tmp_name'];
+                        $pasta ="img/"; //pasta que recebe a imagem de upload
+                        $temporario = $_FILES['foto']['tmp_name']; //caminho temporario da imagem
                         $novoNome = uniqid().".$extensao";
-                        if(move_uploaded_file($temporario, $pasta.$novoNome)){
-                          $cadastro = "INSERT INTO tb_contatos (nome_contato, telefone_contato, email_contato, foto_contato) VALUES (:nome, :telefone, :email, :foto)";
-                      try{
-                        $result = $conect->prepare($cadastro);
-                        $result->bindParam(':nome',$nome,PDO::PARAM_STR);
-                        $result->bindParam(':telefone',$telefone,PDO::PARAM_STR);
-                        $result->bindParam(':email',$email,PDO::PARAM_STR);
-                        $result->bindParam(':foto',$novoNome,PDO::PARAM_STR);
-                        $result->execute();
-
-                        $contar = $result->rowCount();
-                        if($contar > 0){
-                          echo '<div class="container">
-                                    <div class="alert alert-success alert-dismissible">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                    <h5><i class="icon fas fa-check"></i> OK!</h5>
-                                    Contato inserido com sucesso !!!
-                                  </div>
-                                </div>';
-                        }else{
-                          echo '<div class="container">
-                                    <div class="alert alert-danger alert-dismissible">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                    <h5><i class="icon fas fa-check"></i> Ops!</h5>
-                                    Contato não cadastrados !!!
-                                  </div>
-                                </div>';
-                        }
-                      }catch(PDOException $e){
-                        echo "<strong>ERRO DE CADASTRO PDO = </strong>".$e->getMessage();
-                      }
-
-                        }else{
-                          echo"Erro, não foi possível fazer o upload do arquivo";
-                        }
-
-                      }else{
-                        echo "Formato Inválido";
-                      }
-                  }
-              ?>
-            </div> 
-          </div> 
+                        //uniqid(criptografa o nome da imagem),
+                        //depois concatena com a estensao
+                        if(move_uploaded_file($temporario,$pasta.$novoNome)){
+                       
+                          $cadastro = "INSERT INTO tb_contato (nomeContato, telefoneContato, emailContato, fotoContato) VALUES (:nome, :telefone, :email, :foto)";
+                          try{
+                            $result = $conect->prepare($cadastro);
+                            $result->bindParam(':nome',$nome,PDO::PARAM_STR);
+                            $result->bindParam(':telefone',$telefone,PDO::PARAM_STR);
+                            $result->bindParam(':email',$email,PDO::PARAM_STR);
+                            $result->bindParam(':foto',$foto,PDO::PARAM_STR);
+                            $result->execute();
+    
+                            $contar = $result->rowCount();
+                            if($contar > 0){
+                              echo '<div class="container">
+                              <div class="alert alert-success alert-dismissible">
+                              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                              <h5><i class="icon fas fa-check"></i> OK!</h5>
+                              Contato inserido com sucesso !!!
+                            </div>
+                          </div>';
+                  }else{
+                    echo '<div class="container">
+                              <div class="alert alert-danger alert-dismissible">
+                              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                              <h5><i class="icon fas fa-check"></i> Ops!</h5>
+                              Contato não cadastrados !!!
+                            </div>
+                          </div>';
+                             }
+                          }catch (PDOException $e){
+                            echo "<strong>ERRO DE CADASTRO PDO = </strong>".$e->getMessage();
+                          }
+                              }else{
+                                echo "Erro, não foi possível fazer o upload da imagem!";
+                              }
+                                 }else{
+                                 echo "Formato de imagem inválido, aceito
+                                 apenas(png, jpg, jpeg, JPG e gif";
+                                 }
+                                }else{
+                                  echo "Erro, não foi possível fazer o upload do arquivo";
+                              }
+                          
+                      ?>
+            </div>
+          </div>
           <div class="col-md-7">
             <div class="card card-primary">
               <div class="card-header">
@@ -272,12 +279,11 @@
                       <th>Nome</th>
                       <th>Telefone</th>
                       <th>E-mail</th>
-                      
                     </tr>
                   </thead>
                   <tbody>
                     <?php
-                      $select = "SELECT * FROM tb_contatos ORDER BY id_contato DESC LIMIT 8";
+                      $select = "SELECT * FROM tb_contato ORDER BY id_contato DESC LIMIT 8";
                       try{
                         $resultado = $conect->prepare($select);
                         $resultado->execute();
@@ -286,10 +292,10 @@
                           while($show = $resultado->FETCH(PDO::FETCH_OBJ)){   
                     ?>
                     <tr>
-                      <td><img style="width: 41px; border-radius: 100%;" src="img/contato/<?php echo $show->foto_contato;?>"></td>
-                      <td><?php echo $show->nome_contato;?></td>
-                      <td><?php echo $show->telefone_contato;?></td>
-                      <td><?php echo $show->email_contato;?></td>
+                      <td><img style="width: 41px; border-radius: 100%;" src="img/foto1.jpg"></td>
+                      <td><?php echo $show->nomeContato;?></td>
+                      <td><?php echo $show->telefoneContato;?></td>
+                      <td><?php echo $show->emailContato;?></td>
                     </tr>
                     <?php
                       }
@@ -353,9 +359,8 @@
 <script src="plugins/moment/moment.min.js"></script>
 <script src="plugins/daterangepicker/daterangepicker.js"></script>
 <!-- Tempusdominus Bootstrap 4 -->
-<script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-<!-- Summernote -->
-<script src="plugins/summernote/summernote-bs4.min.js"></script>
+<script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.j"></script>
+<script src="plugins/moment/moment-bs4.min.js"></script>
 <!-- overlayScrollbars -->
 <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->

@@ -62,71 +62,74 @@
           
           <!-- /.col -->
           <div class="col-6">
-            <button style="margin: 0 0 20px 0;" name="btnCContato" type="submit" class="btn btn-primary btn-block">Registrar</button>
+            <button name="btnUsuario" style="margin: 0 0 20px 0;" type="submit" class="btn btn-primary btn-block">Registrar</button>
           </div>
           <!-- /.col -->
         </div>
       </form>
       <?php
-                  include('config/conexao.php');
-                  if(isset($_POST['btnCContato'])){
+                  include_once('config/conexao.php');
+                  if(isset($_POST['btnUsuarios'])){
                       $nome = $_POST['nome'];
+                      $telefone = $_POST['senha'];
                       $email = $_POST['email'];
-                      $senha = base64_encode ($_POST['senha']);
-                      $foto = $_FILES['foto'];
-                      
-                      $formatP = array("png","jpg","jpeg","JPG","gif"); 
+                      $formatP = array("png","jpg","jpeg","JPG","gif"); //formato aceito para imagem
                       $extensao = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
+                      // $extensao = extrai a extensao do nome do arquivo
 
                       if(in_array($extensao, $formatP)){
-                        $pasta = "img/user/";
-                        $temporario = $_FILES['foto']['tmp_name'];
+                        $pasta ="img/user/"; //pasta que recebe a imagem de upload
+                        $temporario = $_FILES['foto']['tmp_name']; //caminho temporario da imagem
                         $novoNome = uniqid().".$extensao";
-                        if(move_uploaded_file($temporario, $pasta.$novoNome)){
-                          $cadastro = "INSERT INTO tb_agenda (nome_contato,email_contato,senha_contato,foto_contato) VALUES (:nome, :email, :senha, :foto)";
-                      try{
-                        $result = $conect->prepare($cadastro);
-                        $result->bindParam(':nome',$nome,PDO::PARAM_STR);
-                        $result->bindParam(':email',$email,PDO::PARAM_STR);
-                        $result->bindParam(':senha',$senha,PDO::PARAM_STR);
-                        $result->bindParam(':foto',$novoNome,PDO::PARAM_STR);
-                        $result->execute();
-
-                        $contar = $result->rowCount();
-                        if($contar > 0){
-                          echo '<div class="container">
-                                    <div class="alert alert-success alert-dismissible">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                    <h5><i class="icon fas fa-check"></i> OK!</h5>
-                                    Contato inserido com sucesso !!!
-                                  </div>
-                                </div>';
-                                header("Refresh: 2, index.php");
-                        }else{
-                          echo '<div class="container">
-                                    <div class="alert alert-danger alert-dismissible">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                    <h5><i class="icon fas fa-check"></i> Ops!</h5>
-                                    Contato não cadastrados !!!
-                                  </div>
-                                </div>';
-                        }
-                      }catch(PDOException $e){
-                        echo "<strong>ERRO DE CADASTRO PDO = </strong>".$e->getMessage();
-                      }
-
-                        }else{
-                          echo"Erro, não foi possível fazer o upload do arquivo";
-                        }
-
-                      }else{
-                        echo "Formato Inválido";
-                      }
+                        //uniqid(criptografa o nome da imagem),
+                        //depois concatena com a estensao
+                        if(move_uploaded_file($temporario,$pasta.$novoNome)){
+                        $cadastro = "INSERT INTO tb_usuarios (nome,senha,email,foto) VALUES (:nome, :senha, :email, :foto)";
+                          try{
+                            $result = $conect->prepare($cadastro);
+                            $result->bindParam(':nome',$nome,PDO::PARAM_STR);
+                            $result->bindParam(':senha',$senha,PDO::PARAM_STR);
+                            $result->bindParam(':email',$email,PDO::PARAM_STR);
+                            $result->bindParam(':foto',$foto,PDO::PARAM_STR);
+                            $result->execute();
+    
+                            $contar = $result->rowCount();
+                            if($contar > 0){
+                              echo '<div class="container">
+                              <div class="alert alert-success alert-dismissible">
+                              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                              <h5><i class="icon fas fa-check"></i> OK!</h5>
+                              Contato inserido com sucesso !!!
+                            </div>
+                          </div>';
+                       }else{
+                         echo '<div class="container">
+                              <div class="alert alert-danger alert-dismissible">
+                              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                              <h5><i class="icon fas fa-check"></i> Ops!</h5>
+                              Contato não cadastrados !!!
+                            </div>
+                          </div>';
                   }
-              ?>
+                }catch(PDOException $e){
+                  echo "<strong>ERRO DE CADASTRO PDO = </strong>".$e->getMessage();
+                }
+            }else{
+              echo "Erro, não foi possível fazer o upload da imagem!";
+            }
+               }else{
+               echo "Formato de imagem inválido, aceito
+               apenas(png, jpg, jpeg, JPG e gif";
+               }
+              }else{
+                echo "Erro, não foi possível fazer o upload do arquivo";
+
+          }
+
+             ?>
       <a href="index.php" class="text-center">Ir para o login!</a>
     </div>
-    <!-- /.form-box -->
+    <!-- /.form-ox -->
   </div><!-- /.card -->
 </div>
 <!-- /.register-box -->

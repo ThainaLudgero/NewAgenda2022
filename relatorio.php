@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -91,7 +91,7 @@
           <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Nylkelly de Sousa</a>
+          <a href="#" class="d-block">Leandro Costa</a>
         </div>
       </div>
 
@@ -226,43 +226,43 @@
           <div class="col-md-12">
           <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Relatório de Contatos</h3>
+                <h3 class="card-title">Relatório de Contato</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>Foto do Contato</th>
+                    <th>Foto</th>
                     <th>Nome</th>
-                    <th>telefone</th>
+                    <th>Telefone</th>
                     <th>E-mail</th>
                     <th>Ações</th>
                   </tr>
                   </thead>
                   <tbody>
                   <?php
-                     include_once('config/conexao.php');
-                      $select = "SELECT * FROM tb_contatos ORDER BY id_contato DESC";
+                  include_once('config/conexao.php');
+                      $select = "SELECT * FROM tb_contato ORDER BY id_contato DESC";
                       try{
                         $resultado = $conect->prepare($select);
                         $resultado->execute();
                         $contar = $resultado->rowCount();
                         if($contar > 0){
-                        while($show = $resultado->FETCH(PDO::FETCH_OBJ)){   
-
+                          while($show = $resultado->FETCH(PDO::FETCH_OBJ)){   
                     ?>
-                  <tr>
-                    <td style="text-align:center;"><img style="width: 55px; border-radius:100%" src="img/contato/<?php echo $show->foto_contato;?>"></td>
+               <tr>
+                    <td style="text-align: center">
+                      <img style="width: 53px; border-radius:100%" src="img/contato/d888df26343ed88a0617dd517725fd41.png">
+                </td>  
                     <td style="vertical-align:middle;"><?php echo $show->nome_contato;?></td>
                     <td style="vertical-align:middle;"><?php echo $show->telefone_contato;?></td>
                     <td style="vertical-align:middle;"><?php echo $show->email_contato;?></td>
-                    <td style="text-align: center;vertical-align:middle;">
-                    <a href="#" title="Editar" class="btn btn-success"><img style="width: 15px" src="img/svg/editar.png"></a>
-                    <a href="deletar.php?idDel=<?php echo $show->id_contato;?>" onclick="return confirm('Deseja remover o contato?')" title="Remover" class="btn btn-danger"><img style="width: 15px" src="img/svg/remover.png"></a>
-                    </td>
-
-                  </tr>
+                    <td style="vertical-align:middle; text-align:center">
+                     <a href="editar.php?idUp=<?php echo $show-> id_contato;?>" class="btn btn-success" title="Editar"><img style="width: 16px" src="img/svg/editar.png"></a>
+                     <a href="del.php?idDel=<?php echo $show-> id_contato;?>" class="btn btn-danger" title="Remover" onclick="return confirm9'Deseja remover o contato?')"><img style="width: 16px" src="img/svg/remover.png"></a>
+               </td>
+                 </tr> 
                   <?php
                       }
                     }else{
@@ -271,17 +271,17 @@
                   }catch(PDOException $e){
                     echo '<strong>ERRO DE PDO= </strong>'.$e->getMessage();
                   }
-                    ?>
+                  ?>
                   </tbody>
                   <tfoot>
                   <tr>
-                  <th>Foto do Contato</th>
+                    <th>Foto</th>
                     <th>Nome</th>
-                    <th>telefone</th>
+                    <th>Telefone</th>
                     <th>E-mail</th>
-                    <th>Ações</th> 
+                    <th>Ações</th>
                   </tr>
-                  </tfoot>
+               </tfoot>
                 </table>
               </div>
               <!-- /.card-body -->

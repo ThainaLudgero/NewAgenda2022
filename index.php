@@ -1,3 +1,10 @@
+<?php
+ob_start();
+session_start();
+if(isset($_SESSION('loginUser'))){
+
+}else{}
+?>
 <!DOCTYPE html>
 <html lang="pt_br">
 <head>
@@ -50,7 +57,39 @@
           <!-- /.col -->
         </div>
       </form>
+       <?php
+       include_once('config/conexão.php');
+       if(isset($_POST['btnlogin'])){
+         $email=$_POST['email'];
+         $senha=base64_encode($_POST['senha']);
+         $select="SELECT * FROM tb_user WHERE";
+         "email_user=:emailLogin AND senha_user=:senhaLogin";
+       }try{
+        $resultLogin = $conect->prepare($select);
+        $resultLongin->bindParam(':emailLogin',$login,PDO::PARAM_STR);
+        $resultLongin->bindParam(':emailsenha',$senha,PDO::PARAM_STR);
+        $resultlogin->execute();
 
+        $verificar = $resultLogin->rowCount();
+        if ($verificar>0) {
+          $login=$_POST['email'];
+          $senha=$_POST['senha'];
+          //CRIAR SESSAO: >> >>
+          $_SESSION['loginuser'] = $login;
+          $_SESSION['senhauser'] = $senha;
+          
+          echo "Você será redirecionado para a agenda :)";
+          header("Refresh: 5, home.php");
+        }else{
+          echo "E-mail";
+        }
+        
+        }catch(PDOException $e){
+          echo "<strong>ERRO DE LOGIN = </strong>".$e->getMenssagem();
+        }
+       
+       
+       ?> 
       
       <!-- /.social-auth-links -->
 

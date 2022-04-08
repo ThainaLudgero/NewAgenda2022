@@ -1,17 +1,1 @@
-link do repositório
-https://github.com/ThainaLudgero/NewAgenda2022.git
-
-comandos
-echo "# NewAgenda2022" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git branch -M main
-git remote add origin https://github.com/ThainaLudgero/NewAgenda2022.git
-git push -u origin main
-
-git remote add origin https://github.com/ThainaLudgero/NewAgenda2022.git
-git branch -M main
-git push -u origin main
-
-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
+hevenlyg1
